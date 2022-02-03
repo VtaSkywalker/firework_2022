@@ -2,7 +2,7 @@ class Track:
     """
         烟花的轨迹，由链表的形式存储
     """
-    def __init__(self, pos, velocity, explodeThreshold, alphaDelayRate, color):
+    def __init__(self, pos, velocity, explodeThreshold, alphaDelayRate, color, gamma=0):
         self.pos = pos
         self.velocity = velocity
         self.head = TrackNode(pos, 255, color)
@@ -14,6 +14,7 @@ class Track:
         self.isExplode = False
         self.explodeThreshold = explodeThreshold
         self.alphaDelayRate = alphaDelayRate
+        self.gamma = gamma # 空气阻力系数
 
     def addNode(self, pos, alpha, color):
         """

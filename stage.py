@@ -30,7 +30,11 @@ class Stage:
         # 仅考虑重力场情形
         eachTrack.pos[0] = eachTrack.pos[0] + eachTrack.velocity[0] * self.dt
         eachTrack.pos[1] = eachTrack.pos[1] + eachTrack.velocity[1] * self.dt
-        eachTrack.velocity[1] = eachTrack.velocity[1] + self.g * self.dt
+        v = (eachTrack.velocity[0]**2 + eachTrack.velocity[1]**2)**0.5
+        vx = eachTrack.velocity[0]
+        vy = eachTrack.velocity[1]
+        eachTrack.velocity[0] = vx - eachTrack.gamma * v * vx * self.dt
+        eachTrack.velocity[1] = vy + (self.g - eachTrack.gamma * v * vy) * self.dt
 
     def alphaUpdate(self, eachTrack, p):
         """
@@ -51,7 +55,21 @@ class Stage:
             theta += 15 / 180 * np.pi - 30 / 180 * np.pi * random.random()
             pos = [eachTrack.pos[0], eachTrack.pos[1]]
             velocity = np.array([velocityAmp * np.cos(theta), velocityAmp * np.sin(theta)]) + np.array(eachTrack.velocity)
-            newTrack = Track(pos=pos, velocity=velocity, explodeThreshold=np.inf, alphaDelayRate=alphaDelayRate, color=color)
+            newTrack = Track(pos=pos, velocity=velocity, explodeThreshold=np.inf, alphaDelayRate=alphaDelayRate, color=color, gamma=1e-2)
+            newTrackList.append(newTrack)
+
+    def explosionPeacock(self, eachTrack, newTrackList):
+        """
+            孔雀开屏
+        """
+        alphaDelayRate = 255
+        for theta in np.linspace(0, 2*np.pi, 30, endpoint=False):
+            velocityAmp = 40 + 80 * random.random()
+            color = [255 * random.random(), 255 * random.random(), 255 * random.random()]
+            pos = [eachTrack.pos[0], eachTrack.pos[1]]
+            velocity = np.array([velocityAmp * np.cos(theta), velocityAmp * np.sin(theta)]) + np.array(eachTrack.velocity)
+            newTrack = Track(pos=pos, velocity=velocity, explodeThreshold=np.inf, alphaDelayRate=alphaDelayRate, color=color, gamma=1e-2)
+            newTrack.maxNodeNumber = 3
             newTrackList.append(newTrack)
 
     def explosionStateUpdate(self, eachTrack, newTrackList):
@@ -61,7 +79,11 @@ class Stage:
         eachTrack.lifeTime += self.dt
         if (eachTrack.lifeTime - self.dt < eachTrack.explodeThreshold <= eachTrack.lifeTime):
             eachTrack.isExplode = True
-            self.explosionWillow(eachTrack, newTrackList)
+            fireWorkType = int(2 * random.random())
+            if(fireWorkType == 0):
+                self.explosionWillow(eachTrack, newTrackList)
+            elif(fireWorkType == 1):
+                self.explosionPeacock(eachTrack, newTrackList)
 
     def trackListUpdate(self, newTrackList, deleteTrackList):
         """
