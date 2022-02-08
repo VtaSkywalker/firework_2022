@@ -43,8 +43,8 @@ class Display:
         for eachTrack in self.stage.tracks:
             p = eachTrack.head
             while(p.next != eachTrack.head):
-                surface = pygame.Surface((3,3), pygame.SRCALPHA)
+                surface = pygame.Surface((5,5), pygame.SRCALPHA)
                 color = [p.color[0], p.color[1], p.color[2], p.alpha]
-                pygame.draw.circle(surface, color=color, center=(1.5,1.5), radius=1.5, width=0)
+                pygame.draw.circle(surface, color=color, center=(2.5,2.5), radius=2.5, width=0)
                 self.screen.blit(surface, (p.pos[0], p.pos[1]))
                 p = p.next
