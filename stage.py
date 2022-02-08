@@ -27,7 +27,7 @@ class Stage:
         """
             运动状态的更新
         """
-        # 仅考虑重力场情形
+        # 考虑空气阻力、重力
         eachTrack.pos[0] = eachTrack.pos[0] + eachTrack.velocity[0] * self.dt
         eachTrack.pos[1] = eachTrack.pos[1] + eachTrack.velocity[1] * self.dt
         v = (eachTrack.velocity[0]**2 + eachTrack.velocity[1]**2)**0.5
