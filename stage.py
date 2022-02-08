@@ -72,6 +72,21 @@ class Stage:
             newTrack.maxNodeNumber = 3
             newTrackList.append(newTrack)
 
+    def doubleExplosion(self, eachTrack, newTrackList):
+        """
+            二级爆炸
+        """
+        color = [255, 255, 255]
+        alphaDelayRate = 200
+        velocityAmp = 160 + 20 * random.random()
+        # 爆炸，放出烟花轨迹
+        for theta in np.linspace(0, 2*np.pi, int(5 + 2 * random.random())+1, endpoint=False):
+            theta += 15 / 180 * np.pi - 30 / 180 * np.pi * random.random()
+            pos = [eachTrack.pos[0], eachTrack.pos[1]]
+            velocity = np.array([velocityAmp * np.cos(theta), velocityAmp * np.sin(theta)]) + np.array(eachTrack.velocity)
+            newTrack = Track(pos=pos, velocity=velocity, explodeThreshold=1, alphaDelayRate=alphaDelayRate, color=color, gamma=1e-2)
+            newTrackList.append(newTrack)
+
     def explosionStateUpdate(self, eachTrack, newTrackList):
         """
             更新爆炸状态
@@ -79,11 +94,16 @@ class Stage:
         eachTrack.lifeTime += self.dt
         if (eachTrack.lifeTime - self.dt < eachTrack.explodeThreshold <= eachTrack.lifeTime):
             eachTrack.isExplode = True
-            fireWorkType = int(2 * random.random())
+            fireWorkType = int(3 * random.random())
             if(fireWorkType == 0):
                 self.explosionWillow(eachTrack, newTrackList)
             elif(fireWorkType == 1):
                 self.explosionPeacock(eachTrack, newTrackList)
+            elif(fireWorkType == 2):
+                if(len(self.tracks) <= 255):
+                    self.doubleExplosion(eachTrack, newTrackList)
+                else:
+                    self.explosionWillow(eachTrack, newTrackList)
 
     def trackListUpdate(self, newTrackList, deleteTrackList):
         """
@@ -96,7 +116,7 @@ class Stage:
         for eachTrack in self.tracks:
             if(eachTrack.nodeNumber == 0):
                 deleteTrackList.append(eachTrack)
-            if(((eachTrack.pos[0] - self.width)**2 + (eachTrack.pos[1] - self.height)**2)**0.5 >= 2000):
+            if(((eachTrack.pos[0] - self.width / 2)**2 + (eachTrack.pos[1] - self.height / 2)**2)**0.5 >= 500):
                 deleteTrackList.append(eachTrack)
         for eachDeleteTrackList in deleteTrackList:
             self.tracks.remove(eachDeleteTrackList)
