@@ -63,9 +63,9 @@ class Stage:
             孔雀开屏
         """
         alphaDelayRate = 255
+        color = [255 * random.random(), 255 * random.random(), 255 * random.random()]
         for theta in np.linspace(0, 2*np.pi, 30, endpoint=False):
             velocityAmp = 40 + 80 * random.random()
-            color = [255 * random.random(), 255 * random.random(), 255 * random.random()]
             pos = [eachTrack.pos[0], eachTrack.pos[1]]
             velocity = np.array([velocityAmp * np.cos(theta), velocityAmp * np.sin(theta)]) + np.array(eachTrack.velocity)
             newTrack = Track(pos=pos, velocity=velocity, explodeThreshold=np.inf, alphaDelayRate=alphaDelayRate, color=color, gamma=1e-2)
