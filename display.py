@@ -11,6 +11,7 @@ class Display:
         pygame.init()
         self.size = (self.stage.width, self.stage.height)
         self.screen = pygame.display.set_mode(self.size)
+        self.bgimg = pygame.image.load("bgimg.png")
 
     def mainLoop(self):
         FRAME_INTERV = 17
@@ -40,6 +41,7 @@ class Display:
             绘制烟花
         """
         self.screen.fill((0,0,0))
+        self.screen.blit(self.bgimg, (0,0))
         for eachTrack in self.stage.tracks:
             p = eachTrack.head
             while(p.next != eachTrack.head):

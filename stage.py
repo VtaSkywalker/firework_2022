@@ -8,7 +8,7 @@ class Stage:
     """
     def __init__(self):
         self.tracks = []
-        self.width = 720
+        self.width = 1080
         self.height = 540
         self.g = 98 # 重力加速度参数
         self.dt = 0.05 # 时间间隔
@@ -62,14 +62,14 @@ class Stage:
         """
             孔雀开屏
         """
-        alphaDelayRate = 255
+        alphaDelayRate = 155
         color = [255 * random.random(), 255 * random.random(), 255 * random.random()]
         for theta in np.linspace(0, 2*np.pi, 30, endpoint=False):
             velocityAmp = 40 + 80 * random.random()
             pos = [eachTrack.pos[0], eachTrack.pos[1]]
             velocity = np.array([velocityAmp * np.cos(theta), velocityAmp * np.sin(theta)]) + np.array(eachTrack.velocity)
             newTrack = Track(pos=pos, velocity=velocity, explodeThreshold=np.inf, alphaDelayRate=alphaDelayRate, color=color, gamma=1e-2)
-            newTrack.maxNodeNumber = 3
+            newTrack.maxNodeNumber = 2
             newTrackList.append(newTrack)
 
     def doubleExplosion(self, eachTrack, newTrackList):
@@ -116,7 +116,7 @@ class Stage:
         for eachTrack in self.tracks:
             if(eachTrack.nodeNumber == 0):
                 deleteTrackList.append(eachTrack)
-            if(((eachTrack.pos[0] - self.width / 2)**2 + (eachTrack.pos[1] - self.height / 2)**2)**0.5 >= 500):
+            if(((eachTrack.pos[0] - self.width / 2)**2 + (eachTrack.pos[1] - self.height / 2)**2)**0.5 >= 604):
                 deleteTrackList.append(eachTrack)
         for eachDeleteTrackList in deleteTrackList:
             self.tracks.remove(eachDeleteTrackList)
